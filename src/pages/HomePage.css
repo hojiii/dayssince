@@ -1,0 +1,64 @@
+/**
+ * 기념일 목록 스타일.
+ */
+
+.day-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.day-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 16px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.day-card:active {
+  background: var(--bg);
+}
+
+.day-emoji {
+  flex: none;
+  font-size: 26px;
+  line-height: 1;
+}
+
+.day-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.day-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  /* 이름이 길어도 카드가 무너지지 않게 잘라요. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.day-date {
+  font-size: 13px;
+  color: var(--text-weak);
+}
+
+.day-count {
+  flex: none;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "apps-in-toss": {
+      "source": "/Users/kimjiho/.npm/_npx/e4cfb2c9e9645346/node_modules/create-ait-app/skills",
+      "sourceType": "local",
+      "computedHash": "851df432d28e41b451754ffdb23432c21cd48cc0fb1fe93c82cc8e968ce8770b"
+    }
+  }
+}

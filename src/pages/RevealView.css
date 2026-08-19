@@ -1,0 +1,139 @@
+/**
+ * 결과 공개 화면 스타일.
+ *
+ * 각 단계는 아래에서 살짝 올라오며 나타나요. 한꺼번에 뜨지 않는 게 이 화면의 전부라
+ * 등장 자체가 콘텐츠예요.
+ */
+
+.reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: 20px 0 8px;
+  text-align: center;
+}
+
+.reveal-step {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.reveal-step.is-in {
+  animation: reveal-in 520ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes reveal-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal-emoji {
+  margin: 0;
+  font-size: 44px;
+  line-height: 1.1;
+}
+
+.reveal-label {
+  margin: 6px 0 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-sub);
+}
+
+.reveal-days {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+}
+
+.reveal-number {
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--accent-dark);
+  /* 숫자 폭이 흔들리면 굴러갈 때 글자가 떨려 보여요. */
+  font-variant-numeric: tabular-nums;
+}
+
+.reveal-unit {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent-dark);
+}
+
+.reveal-from {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: var(--text-weak);
+}
+
+.reveal-next {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 22px;
+  border-radius: var(--radius);
+  background: var(--accent-weak);
+}
+
+.reveal-next-label {
+  font-size: 13px;
+  color: var(--text-sub);
+}
+
+.reveal-next-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent-dark);
+}
+
+/* ------------------------------------------------------------------ */
+/* 더 알아보기                                                          */
+/* ------------------------------------------------------------------ */
+
+.trivia {
+  width: 100%;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.trivia-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  opacity: 0;
+  animation: reveal-in 420ms ease forwards;
+}
+
+.trivia-label {
+  font-size: 14px;
+  color: var(--text-weak);
+}
+
+.trivia-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-step,
+  .trivia-row {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}

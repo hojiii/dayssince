@@ -1,0 +1,236 @@
+/**
+ * 전역 스타일.
+ *
+ * 심사 기준상 미니앱은 **라이트 모드로만** 구현해야 하고,
+ * 지도처럼 꼭 필요한 경우가 아니면 **제스처 확대·축소를 막아야** 해요.
+ * 그래서 다크 모드 대응을 일부러 넣지 않았어요.
+ */
+
+:root {
+  /*
+   * 색. 버튼 위 흰 글씨가 읽혀야 하므로 --accent는 흰색 대비 4.5:1 이상으로 잡았어요.
+   * 맑은 숨을 뜻하는 청록 계열이에요. 숨이 캐릭터 자체 색(회색→분홍)과는
+   * 일부러 다른 계열을 써서, "화면 UI"와 "회복 상태 표시"가 헷갈리지 않게 했어요.
+   */
+  --accent: #d97706;
+  --accent-dark: #b45309;
+  --accent-weak: #fef3c7;
+  --green: #00b26e;
+  --red: #f04452;
+
+  --bg: #f2f4f6;
+  --surface: #ffffff;
+  --border: #e5e8eb;
+
+  --text: #191f28;
+  --text-sub: #4e5968;
+  --text-weak: #8b95a1;
+
+  /* 형태 */
+  --radius: 16px;
+  --radius-sm: 10px;
+
+  /* 레이아웃 */
+  --tabbar-height: 76px;
+
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    Pretendard, "Noto Sans KR", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--text);
+
+  /* 라이트 모드 고정 */
+  color-scheme: light only;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* 숫자 폭을 고정해서 금액·일수가 바뀔 때 글자가 흔들리지 않게 해요. */
+  font-variant-numeric: tabular-nums;
+}
+
+* {
+  box-sizing: border-box;
+  /* 더블탭 확대와 탭 지연을 없애요. */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  overscroll-behavior-y: none;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+input {
+  font: inherit;
+  color: inherit;
+}
+
+/* ------------------------------------------------------------------ */
+/* 레이아웃                                                             */
+/* ------------------------------------------------------------------ */
+
+.page {
+  /* 탭바에 콘텐츠가 가리지 않도록 아래를 비워둬요. */
+  padding: 20px 20px calc(var(--tabbar-height) + env(safe-area-inset-bottom, 0px) + 20px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  padding: 4px 0 2px;
+}
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.card-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-weak);
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.6px;
+  color: var(--text);
+}
+
+.stat-unit {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-sub);
+  margin-left: 2px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.muted {
+  color: var(--text-weak);
+  font-size: 14px;
+}
+
+/* ------------------------------------------------------------------ */
+/* 버튼                                                                 */
+/* ------------------------------------------------------------------ */
+
+.btn {
+  width: 100%;
+  border-radius: 12px;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  transition: opacity 0.15s;
+}
+
+.btn:active {
+  opacity: 0.65;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-secondary {
+  background: var(--bg);
+  color: var(--text-sub);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ------------------------------------------------------------------ */
+/* 화면 머리말                                                          */
+/* ------------------------------------------------------------------ */
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.page-header.is-stacked {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.page-header .page-title {
+  margin: 0;
+}
+
+.page-sub {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: var(--text-sub);
+}
+
+.text-button {
+  flex: none;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--accent-dark);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-danger {
+  background: var(--red);
+  color: #fff;
+}

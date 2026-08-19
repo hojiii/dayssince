@@ -1,0 +1,18 @@
+.banner-slot {
+  position: relative;
+  width: 100%;
+  height: 96px;
+}
+
+/* 컨테이너의 width는 항상 화면 너비와 같아야 하고(100%), 고정형 높이는 96px을 권장해요. */
+.banner-slot-target {
+  width: 100%;
+  height: 96px;
+}
+
+.banner-slot-placeholder {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
