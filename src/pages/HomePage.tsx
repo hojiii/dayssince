@@ -5,18 +5,28 @@
  * 공개 연출과 함께 크게 보여주는 화면으로 들어가요.
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BannerSlot } from "../components/BannerSlot";
 import { useAdFree } from "../hooks/useAdFree";
 import { useAnniversaries } from "../hooks/useAnniversaries";
 import { LIVE_INTERSTITIAL_AD_GROUP_ID, useInterstitialAd } from "../hooks/useInterstitialAd";
 import { daysSince, formatDays, isFuture, type Anniversary } from "../lib/days";
+import { setNavigationBarBackButton } from "../lib/navigationBar";
 import { AddForm } from "./AddForm";
 import { RevealView } from "./RevealView";
 import "./HomePage.css";
 
-/** 목록 / 추가 폼 / 결과 공개 중 무엇을 보여줄지예요. */
-type View = { name: "list" } | { name: "add" } | { name: "reveal"; id: string };
+/**
+ * 목록 / 추가 폼 / 광고 안내 / 결과 공개 중 무엇을 보여줄지예요.
+ *
+ * "adPrompt"는 광고가 준비돼 있을 때만 거쳐요 — 버튼을 눌러야만 광고가 뜨게
+ * 하기 위해서예요. 예고 없이 광고가 튀어나오면 안 된다는 정책 때문이에요.
+ */
+type View =
+  | { name: "list" }
+  | { name: "add" }
+  | { name: "adPrompt"; id: string }
+  | { name: "reveal"; id: string };
 
 const SUGGESTIONS: { label: string; emoji: string }[] = [
   { label: "태어난 날", emoji: "🎂" },
@@ -36,6 +46,16 @@ export function HomePage() {
     preload: view.name === "add",
   });
 
+  /**
+   * 추가 폼과 결과 공개 화면에는 목록으로 돌아가는 자체 버튼이 있어요. 그동안은
+   * 네이티브 뒤로가기를 숨겨서, 토스 내비게이션 바의 뒤로가기와 함께 노출되지
+   * 않게 해요. 목록 화면은 자체 버튼이 없어서 네이티브 뒤로가기가 곧 앱 종료예요.
+   */
+  useEffect(() => {
+    // adPrompt에는 자체 취소·뒤로 버튼이 없어서, 네이티브 뒤로가기를 그대로 둬요.
+    void setNavigationBarBackButton(view.name === "list" || view.name === "adPrompt");
+  }, [view.name]);
+
   if (loading) {
     return (
       <main className="page">
@@ -44,19 +64,43 @@ export function HomePage() {
     );
   }
 
+  /** 저장 뒤에 광고가 준비돼 있으면 안내 화면을, 아니면 바로 공개 화면을 보여줘요. */
+  function afterAdd(created: Anniversary) {
+    setView(
+      interstitial.ready ? { name: "adPrompt", id: created.id } : { name: "reveal", id: created.id },
+    );
+  }
+
   if (view.name === "add") {
     return (
       <AddForm
         suggestions={SUGGESTIONS}
         onCancel={items.length === 0 ? undefined : () => setView({ name: "list" })}
-        onSubmit={(input) => {
-          const created = add(input);
-          // 결과 화면으로 먼저 넘긴 다음 그 위에 광고를 덮어요. 광고를 닫으면
-          // 공개 연출이 이어져요. 광고가 준비되지 않았으면 그냥 연출만 보여요.
-          setView({ name: "reveal", id: created.id });
-          interstitial.show();
-        }}
+        onSubmit={(input) => afterAdd(add(input))}
       />
+    );
+  }
+
+  if (view.name === "adPrompt") {
+    return (
+      <main className="page">
+        <div className="lookup" role="status" aria-live="polite">
+          <p className="lookup-text">기록이 준비됐어요</p>
+          <p className="lookup-sub">광고를 보고 확인해요</p>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => {
+              // 결과 화면으로 먼저 넘긴 다음 그 위에 광고를 덮어요. 광고를 닫으면
+              // 공개 연출이 이어져요.
+              setView({ name: "reveal", id: view.id });
+              interstitial.show();
+            }}
+          >
+            광고 보고 결과 보기
+          </button>
+        </div>
+      </main>
     );
   }
 
@@ -68,16 +112,7 @@ export function HomePage() {
   }
 
   if (items.length === 0) {
-    return (
-      <AddForm
-        suggestions={SUGGESTIONS}
-        onSubmit={(input) => {
-          const created = add(input);
-          setView({ name: "reveal", id: created.id });
-          interstitial.show();
-        }}
-      />
-    );
+    return <AddForm suggestions={SUGGESTIONS} onSubmit={(input) => afterAdd(add(input))} />;
   }
 
   return (
