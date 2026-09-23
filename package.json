@@ -14,7 +14,7 @@
     "dev:vite": "vite"
   },
   "dependencies": {
-    "@apps-in-toss/web-framework": "latest",
+    "@apps-in-toss/web-framework": "^3.5.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
